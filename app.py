@@ -78,6 +78,14 @@ def index():
         # Actualizar gran total
         grand_total += row_total
 
+        # Calcular outflow_balance de cada row
+        transacciones = db.execute("SELECT * FROM transacciones WHERE stock_id IN (SELECT id FROM stocks WHERE symbol=?) AND user_id=?;", portfolio_row["symbol"], session["user_id"])
+        outflow_balance = 0
+        for row in transacciones:
+            outflow_balance += row["price"] * row["shares"]
+        portfolio_row["outflow_balance"] = outflow_balance
+
+
     # Obtener cash de usuario y gran total
     cash = db.execute("SELECT * FROM users WHERE id=?", session["user_id"])[0]["cash"]
     grand_total += cash
