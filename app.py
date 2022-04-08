@@ -85,6 +85,8 @@ def index():
             outflow_balance += row["price"] * row["shares"]
         portfolio_row["outflow_balance"] = outflow_balance
 
+    # Test si outflow_balance está saliendo
+    # return "{}".format(user_portfolio) # OK!!
 
     # Obtener cash de usuario y gran total
     cash = db.execute("SELECT * FROM users WHERE id=?", session["user_id"])[0]["cash"]
@@ -104,7 +106,7 @@ def buy():
     if request.method == "POST":
 
         # Tomar input de usuario: symbol y shares
-        symbol = request.form.get("symbol")
+        symbol = request.form.get("symbol").upper()
         shares = request.form.get("shares")
         if not symbol or not shares:
             return apology("missing symbol or shares", 400)
